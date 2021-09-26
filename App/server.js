@@ -11,8 +11,13 @@ const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 db.on('connected', () => {console.log('Database connected')});
 
+const indexRouter = require('./routes/index');
+const apiRouter = require('./routes/api');
+app.use('/', indexRouter);
+app.use('/api', apiRouter);
+
 //BOOK API
-app.route('/api')
+/*app.route('/api')
     .get(function(req, res){
         res.status(200).send({books : [
           {
@@ -33,22 +38,9 @@ app.route('/api')
         ]});
     })
     .post(function(req, res){
-        res.sendStatus(201);
-    });
 
-app.route('/api/:bookId')
-  .get(function(req, res){
-    res.sendStatus(200);
-  })
-  .post(function(req, res){
-    res.sendStatus(501);//not implemented
-  })
-  .put(function(req, res){
-    res.sendStatus(200);
-  })
-  .delete(function(req, res){
-    res.sendStatus(200);
-  });
+        res.sendStatus(201);
+    });*/
 
 app.listen(port, () => {
     console.log(`Listening on port http://localhost:${port}`);
