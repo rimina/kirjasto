@@ -1,18 +1,29 @@
-//Starting point for the project
+//This component holds the state of the app. I hope.
 
 import './App.css';
 import React from 'react';
+import Book from './Book';
+import EditInfo from './EditInfo';
 
 class App extends React.Component{
   constructor(props){
     super(props);
-    this.state = {data : null};
+    this.state = {books : [],
+      showInfo : false,
+      info : {},
+      selectedBook : {
+        title : "",
+        author : "",
+        description :""
+      }
+    };
   } 
 
   componentDidMount() {
     this.callBackend()
-      .then(res => this.setState({data : res.express}))
+      .then(res => this.setState({books : res.books}))
       .catch(err => console.log(err));
+    console.log(this.state);
   }
 
   callBackend = async() => {
@@ -27,12 +38,16 @@ class App extends React.Component{
   }
   
   render(){
+    const bookList = [];
+    this.state.books.forEach((book) => {
+      bookList.push(<Book author = {book.author} tittle = {book.title} description = {book.description} />);
+    });
+
     return (
       <div className="App">
-        <header className="App-header">
-          <p className ="App-intro">{this.state.data}</p>
-        </header>
-        
+        <p className ="Book-list">Books:</p>
+        <div>{bookList}</div>
+        <EditInfo active = {this.state.showInfo} author = {this.state.selectedBook.author} title = {this.state.selectedBook.title} description = {this.state.selectedBook.description} />
       </div>
     );
   }
