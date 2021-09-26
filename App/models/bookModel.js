@@ -9,10 +9,10 @@ const BookSchema = new Schema(
     //Books can have description of 200 characters
     //Books will have information about those were updated
     {
-        tittle : {type: String, required : true, maxlength : 100},
+        title : {type: String, required : true, maxlength : 100},
         author : {type: String, required : true, maxlength : 100},
         description : {type: String, required : false, maxlength : 200},
-        updated : {type : Date, required : true}
+        updated : {type : Date, required : false}
     }
 );
 
