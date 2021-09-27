@@ -1,6 +1,10 @@
 //creating a lightweight server that provides a REST API
 
 const express = require('express');
+
+const indexRouter = require('./routes/index');
+const apiRouter = require('./routes/api');
+
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -16,9 +20,6 @@ app.use(
     extended: true
   })
 )
-
-const indexRouter = require('./routes/index');
-const apiRouter = require('./routes/api');
 app.use('/', indexRouter);
 app.use('/api', apiRouter);
 
