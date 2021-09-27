@@ -8,7 +8,7 @@ import EditInfo from './EditInfo';
 function Book(props){
 
     const [modalIsOpen, setModalIsOpen] = useState(false);
-    const [editinIsOpen, setEditingIsOpen] = useState(false);
+    const [editingIsOpen, setEditingIsOpen] = useState(false);
     const [book, setBook] = useState({
         author : props.author,
         title : props.title,
@@ -61,7 +61,7 @@ function Book(props){
                 onDelete={onDelete}
             />}
             {modalIsOpen && <Backdrop onClose={closeModal}/>}
-            {editinIsOpen && <EditInfo
+            {editingIsOpen && <EditInfo
                 title = {book.title}
                 author = {book.author}
                 description = {book.description}

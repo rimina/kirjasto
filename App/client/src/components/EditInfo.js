@@ -30,8 +30,8 @@ function EditInfo(props){
 
     return(
         <div className ="editInfo">
-            <span>Title:<input type="text" defaultValue={title} onChange={saveAuthor}/></span><br />
-            <span>Author:<input type="text" defaultValue={author} onChange={saveTitle}/></span><br />
+            <span>Title:<input type="text" defaultValue={title} onChange={saveTitle}/></span><br />
+            <span>Author:<input type="text" defaultValue={author} onChange={saveAuthor}/></span><br />
             <span>Description:<input type="text" defaultValue={description} onChange={saveDescription}/></span><br />
 
             <button className = "btn" onClick={props.onCancel}>Cancel</button> 
