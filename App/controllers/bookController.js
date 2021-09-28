@@ -35,7 +35,7 @@ exports.book_info = function(req, res){
 
 //Creates a new book
 exports.book_create = function(req, res){
-    console.log(req);
+    console.log(req.body);
     return BookModel.create(req.body, function(err){
         if(err){
             console.log(err);

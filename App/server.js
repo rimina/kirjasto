@@ -21,6 +21,9 @@ app.use(
     extended: true
   })
 )
+
+app.use(express.json());
+
 app.use(cors());
 app.use('/', indexRouter);
 app.use('/api', apiRouter);
