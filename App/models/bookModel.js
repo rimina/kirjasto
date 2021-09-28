@@ -11,8 +11,7 @@ const BookSchema = new Schema(
     {
         title : {type: String, required : true, maxlength : 100},
         author : {type: String, required : true, maxlength : 100},
-        description : {type: String, required : false, maxlength : 200},
-        updated : {type : Date, required : false}
+        description : {type: String, required : false, maxlength : 200}
     }
 );
 

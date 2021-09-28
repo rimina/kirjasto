@@ -7,12 +7,11 @@ import EditInfo from './EditInfo';
 
 function Book(props){
 
-    //const url = "http://localhost:5000/api/"+props.book._id;
+    const url = "http://localhost:5000/api/"+props.book._id;
 
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [editingIsOpen, setEditingIsOpen] = useState(false);
     const [book, setBook] = useState(props.book);
-    const [url, ] = useState("http://localhost:5000/api/"+props.book._id);
     const [isReady, setReady] = useState(false);
 
     //Delete the card and the book
@@ -33,11 +32,6 @@ function Book(props){
         }
     }, [isReady]);
 
-
-    //this is returned when selected book info is fetched
-    //const description = props.description;
-    //TODO: some click callback thing to tell what info to show on the edit view
-    //Also books need some kind of id as they will be items in database
     function showInfo(){
         setModalIsOpen(true);
     }
@@ -49,15 +43,13 @@ function Book(props){
     function onEdit(){
         setEditingIsOpen(true);
     }
-    function cancelEdit(){
+    function closeEdit(){
         setEditingIsOpen(false);
     }
 
     //we should also save the book info here...
     function saveEdit(newInfo){
         setBook(newInfo);
-        setEditingIsOpen(false);
-        //WE SHOULD CALL PUT HERE
     }
     function onDelete(){
         setModalIsOpen(false);
@@ -77,11 +69,9 @@ function Book(props){
             />}
             {modalIsOpen && <Backdrop onClose={closeModal}/>}
             {editingIsOpen && <EditInfo
-                title = {book.title}
-                author = {book.author}
-                description = {book.description}
-                onClose = {saveEdit}
-                onCancel={cancelEdit}
+                book = {book}
+                onSave = {saveEdit}
+                onCancel={closeEdit}
             />}
             
         </div>

@@ -2,7 +2,7 @@
 import {useEffect, useState} from 'react';
 
 import Backdrop from './Backdrop';
-import EditInfo from './EditInfo';
+import TextFields from './TextFields';
 
 function AddNew(props){
     const url = "http://localhost:5000/api";
@@ -63,11 +63,11 @@ function AddNew(props){
         <div>
             <button className = "btn" onClick = {onAdd}>Add new</button>
             {editingIsOpen && <Backdrop onClose={onClose}/>}
-            {editingIsOpen && <EditInfo
+            {editingIsOpen && <TextFields
                 title = ""
                 author = ""
                 description = ""
-                onClose = {save}
+                onSave = {save}
                 onCancel={onClose}
             />}
         </div>

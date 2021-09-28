@@ -1,42 +1,54 @@
 //The 'form' to save, edit and delete books
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
+
+import TextFields from './TextFields';
 
 function EditInfo(props){
+    //const url = "http://localhost:5000/api/"+props.book._id;
+    const [isReady, setReady] = useState(false);
+    const [newData, setNewData] = useState(props.book);
 
-    const [author, setAuthor] = useState(props.author);
-    const [title, setTitle] = useState(props.title);
-    const [description, setDescription] = useState(props.description);
+    //Save changes to the server
+    useEffect(() =>{
+        if(isReady){
+            const requestOptions = {
+                method : 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    author : newData.author,
+                    title : newData.title,
+                    description : newData.description
+                    })
+            };
+            fetch("http://localhost:5000/api/"+props.book._id, requestOptions)
+                .then(response => response.json())
+                .then(data => {
+                    console.log("ON EDIT HOOK");
+                    if(data.errors === undefined){
+                        props.onSave(newData);
+                    }
+                    setReady(false);
+                })
+                .catch(console.error);
+        }
+    }, [isReady]);
 
-    //I'm not quite sure how to do this in more elegant way
-    //dividing the fields to their own component felt overkill here.
-    function saveAuthor(event){
-        setAuthor(event.target.value);
-    };
-    function saveTitle(event){
-        setTitle(event.target.value);
-    };
-    function saveDescription(event){
-        setDescription(event.target.value);
-    };
-
-    function saveBook(){
-        const book = {
-            author : author,
-            title : title,
-            description : description
-        };
-        props.onClose(book);
+    function saveBook(tmp){
+        //Saving the id so that it don't get lost in the way
+        tmp._id = props.book._id;
+        console.log(tmp);
+        setNewData(tmp);
+        setReady(true);
     }
 
     return(
-        <div className ="editInfo">
-            <span>Title:<input type="text" defaultValue={title} onChange={saveTitle}/></span><br />
-            <span>Author:<input type="text" defaultValue={author} onChange={saveAuthor}/></span><br />
-            <span>Description:<input type="text" defaultValue={description} onChange={saveDescription}/></span><br />
-
-            <button className = "btn" onClick={props.onCancel}>Cancel</button> 
-            <button className = "btn" onClick={saveBook}>Save</button>
-        </div>
+        <TextFields
+            title = {newData.title}
+            author = {newData.author}
+            description = {newData.description}
+            onSave = {saveBook}
+            onCancel={props.onCancel}
+        />
     );
 }
 
