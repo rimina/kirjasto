@@ -1,5 +1,5 @@
 //Abstraction for a book in a booklist
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 
 import Modal from './Modal';
 import Backdrop from './Backdrop';
@@ -7,13 +7,32 @@ import EditInfo from './EditInfo';
 
 function Book(props){
 
+    //const url = "http://localhost:5000/api/"+props.book._id;
+
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [editingIsOpen, setEditingIsOpen] = useState(false);
-    const [book, setBook] = useState({
-        author : props.author,
-        title : props.title,
-        description : props.description
-    });
+    const [book, setBook] = useState(props.book);
+    const [url, ] = useState("http://localhost:5000/api/"+props.book._id);
+    const [isReady, setReady] = useState(false);
+
+    //Delete the card and the book
+    useEffect(() =>{
+        if(isReady){
+            const requestOptions = {
+                method : 'DELETE'
+            };
+            fetch(url, requestOptions)
+                .then(response => response.json())
+                .then(data => {
+                    if(data.errors === undefined){
+                        props.onDelete();
+                    }
+                    setReady(false);
+                })
+                .catch(console.error);
+        }
+    }, [isReady]);
+
 
     //this is returned when selected book info is fetched
     //const description = props.description;
@@ -40,22 +59,18 @@ function Book(props){
         setEditingIsOpen(false);
         //WE SHOULD CALL PUT HERE
     }
-
-
     function onDelete(){
         setModalIsOpen(false);
-        console.log("ID: " + props.id);
-        props.onDelete(props.id);  
+        setReady(true);
     }
 
     return (
         <div className = "card">
             <p>{book.title} by {book.author}</p>
             <button className = "btn" onClick = {showInfo}>Show info</button>
+            <button className='btn' onClick={onDelete}>Delete</button>
             {modalIsOpen && <Modal 
-                title = {book.title}
-                author = {book.author}
-                description = {book.description}
+                book = {book}
                 onEdit = {onEdit}
                 onClose={closeModal}
                 onDelete={onDelete}

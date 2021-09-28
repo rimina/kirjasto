@@ -2,17 +2,18 @@
 const express = require('express');
 const cors = require('cors');
 
-const router = express.Router();
 //Controllers (there could be more if we had many types of objects)
 const bookController = require('../controllers/bookController');
 
+const router = express.Router();
+//Enabling preflight
+router.options('/', cors());
 router.use(function timeLog (req, res, next) {
     console.log('Time: ', Date.now());
     next();
 });
 
-//Enabling preflight
-//router.options('/', cors());
+
 
 //POST for creating a book
 router.post('/', bookController.book_create);

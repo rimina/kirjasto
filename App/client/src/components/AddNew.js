@@ -35,7 +35,7 @@ function AddNew(props){
                 .then(data => {
                     //we don't want to save the book to the list if
                     //there was an error
-                    if(isReady && data.errors === undefined){
+                    if(data.errors === undefined){
                         props.onSave(data);
                     }
                     

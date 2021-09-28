@@ -7,7 +7,6 @@ const BookModel = require('../models/bookModel');
 exports.book_list = function(req, res){
     return BookModel.find({}, function(err, books){
         if(!err){
-            console.log(books);
             return res.status(200).send(books);
         }
         else{
@@ -35,15 +34,14 @@ exports.book_info = function(req, res){
 
 //Creates a new book
 exports.book_create = function(req, res){
-    console.log(req.body);
     return BookModel.create(req.body, function(err){
         if(err){
             console.log(err);
             return res.status(500).send(err);
         }
         else{
+            //let's return the book we added
             const result = arguments["1"];
-            console.log(result);
             return res.status(201).send(result);
         }
     });
@@ -66,11 +64,11 @@ exports.book_edit = function(req, res){
             return res.status(200).send(book);
         }
     });
-    //res.send('NOT IMPLEMENTED: Book create: ' + req.params.id);
 };
 
 //Deletes a book
 exports.book_delete = function(req, res){
+    console.log("Deleting book : " +req.params.id);
     return BookModel.findByIdAndDelete(req.params.id, function(err, book){
         if(err){
             console.log(err);
@@ -79,7 +77,9 @@ exports.book_delete = function(req, res){
         else if(!book){
             return res.status(404).send({'message' : 'not found'});
         }
+        else{
+            return res.status(200).send({'message: ' : 'deleted'});
+        }
     });
-    //res.send('NOT IMPLEMENTED: Book delete: ' + req.params.id);
 };
 

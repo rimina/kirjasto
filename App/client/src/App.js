@@ -11,40 +11,37 @@ function App(){
   const url = "http://localhost:5000/api";
 
   const [bookList, setBookList] = useState([]);
+  const [getBooks, setGetBooks] = useState(true);
 
   useEffect(() => {
-    fetch(url)
-    .then(response => response.json())
-    .then(data => {
-      setBookList(data);
-    })
-    .catch(console.error);
-  }, []);
+    if(getBooks){
+      fetch(url)
+      .then(response => response.json())
+      .then(data => {
+        setBookList(data);
+        setGetBooks(false);
+      })
+      .catch(console.error);
+    }
 
-  function deleteBook(id){
-    console.log("deleting item id: " + id);
+  }, [getBooks]);
+
+  //There has been changes on the booklist so we should fetch the books from the server
+  //This is not the optimal way to do this. For real we should update only the parts needed.
+  //Remove items here locally if something is deleted, append the list with new data added
+  //and do nothing on book update.
+  //Though this is a sure way to keep the state consistent. It's just very inefficient.
+  function updateBooks(){
+    setGetBooks(true);
   }
 
   const bookCards = [];
   for(let i = 0; i < bookList.length; ++i){
     const book = bookList[i];
     bookCards.push(<Book
-      author = {book.author}
-      title = {book.title}
-      description = {book.description}
-      id = {book.id}
-      onDelete = {deleteBook} key = {i}/>);
-  }
-
-  //Saving new book to the list
-  function saveBook(newInfo){
-    console.log(newInfo);
-    let newBooks = bookList.slice();
-    newInfo.id = newBooks.length;
-    newInfo.key = newInfo.id;
-    newBooks.push(newInfo);
-    setBookList(newBooks);
-    //WE SHOULD CALL POST HERE
+      book = {book}
+      onDelete = {updateBooks}
+      key = {book._id}/>);
   }
 
   return(
@@ -52,7 +49,7 @@ function App(){
       <p className ="Book-list">Books:</p>
       <div>{bookCards}</div>
       <br/>
-      <AddNew onSave = {saveBook}/>
+      <AddNew onSave = {updateBooks}/>
     </div>
   );
 
