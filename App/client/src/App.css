@@ -58,3 +58,7 @@ h1, h2 {
   top: 20vh;
   left: calc(50% - 15rem);
 }
+
+.required {
+  color: red;
+}
