@@ -38,6 +38,7 @@ function App(){
 
   //Saving new book to the list
   function saveBook(newInfo){
+    console.log(newInfo);
     let newBooks = bookList.slice();
     newInfo.id = newBooks.length;
     newInfo.key = newInfo.id;

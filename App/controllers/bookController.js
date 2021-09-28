@@ -42,7 +42,9 @@ exports.book_create = function(req, res){
             return res.status(500).send(err);
         }
         else{
-            return res.status(203).send({'message' : 'created'});
+            const result = arguments["1"];
+            console.log(result);
+            return res.status(201).send(result);
         }
     });
 };
