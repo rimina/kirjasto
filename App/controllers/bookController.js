@@ -7,6 +7,7 @@ const BookModel = require('../models/bookModel');
 exports.book_list = function(req, res){
     return BookModel.find({}, function(err, books){
         if(!err){
+            console.log(books);
             return res.status(200).send(books);
         }
         else{

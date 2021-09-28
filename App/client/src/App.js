@@ -1,6 +1,6 @@
-//This component holds the state of the app. I hope.
+//The react app component upon which everything is build.
 import React from 'react';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import './App.css';
 
 import Book from './components/Book';
@@ -8,20 +8,18 @@ import AddNew from './components/AddNew';
 
 function App(){
 
-  const [bookList, setBookList] = useState([
-    {
-      title : "Lord of the Rings",
-      author : "J.R.R. Tolkien",
-      description : "Taking the hobits to Isengard",
-      id : 0
-    },
-    {
-      title : "Hobits",
-      author : "J.R.R. Tolkien",
-      description : "Here and there and everywhere.",
-      id : 1
-    }
-  ]);
+  const url = "http://localhost:5000/api";
+
+  const [bookList, setBookList] = useState([]);
+
+  useEffect(() => {
+    fetch(url)
+    .then(response => response.json())
+    .then(data => {
+      setBookList(data);
+    })
+    .catch(console.error);
+  }, []);
 
   function deleteBook(id){
     console.log("deleting item id: " + id);

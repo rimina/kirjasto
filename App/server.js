@@ -1,6 +1,7 @@
 //creating a lightweight server that provides a REST API
 
 const express = require('express');
+const cors = require('cors');
 
 const indexRouter = require('./routes/index');
 const apiRouter = require('./routes/api');
@@ -20,6 +21,7 @@ app.use(
     extended: true
   })
 )
+app.use(cors());
 app.use('/', indexRouter);
 app.use('/api', apiRouter);
 

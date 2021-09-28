@@ -11,8 +11,8 @@ router.use(function timeLog (req, res, next) {
     next();
 });
 
-//Enabling cross origin content with CORS for all requests
-router.options('/', cors());
+//Enabling preflight
+//router.options('/', cors());
 
 //POST for creating a book
 router.post('/', bookController.book_create);
