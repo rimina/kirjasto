@@ -1,5 +1,4 @@
 //The react app component upon which everything is build.
-import React from 'react';
 import {useEffect, useState} from 'react';
 import './App.css';
 
