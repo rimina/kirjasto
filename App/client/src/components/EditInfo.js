@@ -4,7 +4,6 @@ import {useEffect, useState} from 'react';
 import TextFields from './TextFields';
 
 function EditInfo(props){
-    //const url = "http://localhost:5000/api/"+props.book._id;
     const [isReady, setReady] = useState(false);
     const [newData, setNewData] = useState(props.book);
 
@@ -20,7 +19,7 @@ function EditInfo(props){
                     description : newData.description
                     })
             };
-            fetch("http://localhost:5000/api/"+props.book._id, requestOptions)
+            fetch(props.baseurl+"/"+props.book._id, requestOptions)
                 .then(response => response.json())
                 .then(data => {
                     setReady(false);

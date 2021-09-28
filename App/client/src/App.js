@@ -21,9 +21,7 @@ function App(){
       fetch(url)
       .then(response => response.json())
       .then(data => {
-        //seting the raw data
-        setBookList(data);
-        //generating the list from the raw data
+        //setting up the data
         updateCards(data);
         setGetBooks(false);
       })
@@ -36,21 +34,23 @@ function App(){
   //Deletes a book card
   function deleteBook(b){
     let tmp = bookList;
-    let index = tmp.indexOf(b);
+    const index = tmp.indexOf(b);
     tmp.splice(index, 1);
     updateCards(tmp);
-    setBookList(tmp);
   }
   
   //Updates the book cards when needed e.g. new data fetched
   function updateCards(data){
+    setBookList(data);
     let tmp = [];
     for(let i = 0; i < data.length; ++i){
       const book = data[i];
       tmp.push(<Book
         book = {book}
         onDelete = {deleteBook}
-        key = {book._id}/>);
+        baseurl = {url}
+        key = {book._id}
+      />);
     }
     setBookCards(tmp);
   }
@@ -60,7 +60,6 @@ function App(){
     let tmp = bookList;
     tmp.push(b);
     updateCards(tmp);
-    setBookList(tmp);
   }
 
   //If we wanted to update all the books we could use this
@@ -74,7 +73,10 @@ function App(){
       <h1>Books</h1>
       <div>{bookCards}</div>
       <br/>
-      <AddNew onSave = {addBook}/>
+      <AddNew
+        onSave = {addBook}
+        baseurl = {url}
+      />
     </div>
   );
 

@@ -6,7 +6,7 @@ import EditInfo from './EditInfo';
 
 function Book(props){
 
-    const url = "http://localhost:5000/api/"+props.book._id;
+    const url = props.baseurl+"/"+props.book._id;
 
     const [editingIsOpen, setEditingIsOpen] = useState(false);
     const [book, setBook] = useState(props.book);
@@ -51,13 +51,16 @@ function Book(props){
         <div className = "card">
             <p>{book.title} by {book.author}</p>
             <p>Description: {book.description}</p>
-            <button className = "btn" onClick = {onEdit}>Edit</button>
+            <button className = "btn"
+                onClick = {onEdit}
+            >Edit</button>
             <button className='btn' onClick={onDelete}>Delete</button>
             {editingIsOpen && <Backdrop/>}
             {editingIsOpen && <EditInfo
                 book = {book}
                 onSave = {saveEdit}
                 onCancel={closeEdit}
+                baseurl = {props.baseurl}
             />}
             
         </div>

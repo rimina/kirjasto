@@ -31,8 +31,8 @@ function TextFields(props){
 
     return(
         <div className ="editInfo">
-            <span class ="required">Title:<input type="text" defaultValue={title} onChange={saveTitle}/> *</span><br />
-            <span class ="required">Author:<input type="text" defaultValue={author} onChange={saveAuthor}/> *</span><br />
+            <span className ="required">Title:<input type="text" defaultValue={title} onChange={saveTitle}/> *</span><br />
+            <span className ="required">Author:<input type="text" defaultValue={author} onChange={saveAuthor}/> *</span><br />
             <span>Description:<input type="text" defaultValue={description} onChange={saveDescription}/></span><br />
 
             <button className = "btn" onClick={props.onCancel}>Close</button> 

@@ -5,7 +5,7 @@ import Backdrop from './Backdrop';
 import TextFields from './TextFields';
 
 function AddNew(props){
-    const url = "http://localhost:5000/api";
+    //const url = "http://localhost:5000/api";
     //To initialize the empty state
     const emptyBook = {
         author : "",
@@ -29,7 +29,7 @@ function AddNew(props){
                 description : book.description
                 })
             };
-            fetch(url, requestOptions)
+            fetch(props.baseurl, requestOptions)
                 .then(response => response.json())
                 .then(data => {
                     setBook(emptyBook);
