@@ -20,7 +20,6 @@ function AddNew(props){
     //However I'm not sure how to fix this. (My first ever react.js app)
     useEffect(() =>{
         if(isReady){
-            console.log("book we are saving: " + book);
             const requestOptions = {
                 method : 'POST',
                 headers : { 'Content-Type': 'application/json' },
@@ -33,15 +32,14 @@ function AddNew(props){
             fetch(url, requestOptions)
                 .then(response => response.json())
                 .then(data => {
+                    setBook(emptyBook);
+                    setReady(false);
+
                     //we don't want to save the book to the list if
                     //there was an error
                     if(data.errors === undefined){
                         props.onSave(data);
                     }
-                    
-                    setBook(emptyBook);
-                    setReady(false);
-                    
                 })
                 .catch(console.error);
         }

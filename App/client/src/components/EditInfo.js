@@ -23,11 +23,11 @@ function EditInfo(props){
             fetch("http://localhost:5000/api/"+props.book._id, requestOptions)
                 .then(response => response.json())
                 .then(data => {
-                    console.log("ON EDIT HOOK");
+                    setReady(false);
                     if(data.errors === undefined){
                         props.onSave(newData);
                     }
-                    setReady(false);
+                    
                 })
                 .catch(console.error);
         }

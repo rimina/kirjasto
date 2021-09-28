@@ -1,5 +1,5 @@
 function Backdrop(props){
-    return <div className = "backdrop" onClick={props.onClose} />;
+    return <div className = "backdrop"/>;
 }
 
 export default Backdrop;
