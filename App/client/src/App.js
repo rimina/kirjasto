@@ -28,16 +28,16 @@ function App(){
       .catch(console.error);
     }
 
-  }, [getBooks]);//I could also use [] as a last parameter as this is really ran just once now
-  //But I left it there as we could want to fetch all the books again in some situation
+  }, [getBooks]);
 
   //Deletes a book card
-  function deleteBook(b){
+  //I really wanted to use this function but it messes the state somehow
+  /*function deleteBook(b){
     let tmp = bookList;
     const index = tmp.indexOf(b);
     tmp.splice(index, 1);
     updateCards(tmp);
-  }
+  }*/
   
   //Updates the book cards when needed e.g. new data fetched
   function updateCards(data){
@@ -47,7 +47,7 @@ function App(){
       const book = data[i];
       tmp.push(<Book
         book = {book}
-        onDelete = {deleteBook}
+        onDelete = {updateBooks}
         baseurl = {url}
         key = {book._id}
       />);
@@ -55,18 +55,24 @@ function App(){
     setBookCards(tmp);
   }
 
+  //I really wanted to use this function but it messes the state somehow
   //Adds a book card
-  function addBook(b){
+  /*function addBook(b){
     let tmp = bookList;
     tmp.push(b);
     updateCards(tmp);
   }
+  */
 
-  //If we wanted to update all the books we could use this
-  //Now we fetch the books only when the program starts
-  /*function updateBooks(){
+  //We fetch the booklist when we update the stat in the client
+  //This is definitely not an optimal way to do this we really should
+  //not retrieve _ALL_ the items from the database everytime something changes
+  //However, I don't know react well enough so there is something funky somewhere
+  //and because of that the delete and update methods, commented out above,
+  //messes up the list state completely. So this is a quick and dirty fix.
+  function updateBooks(){
     setGetBooks(true);
-  }*/
+  }
 
   return(
     <div className="App">
@@ -74,7 +80,7 @@ function App(){
       <div>{bookCards}</div>
       <br/>
       <AddNew
-        onSave = {addBook}
+        onSave = {updateBooks}
         baseurl = {url}
       />
     </div>
