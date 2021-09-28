@@ -24,7 +24,7 @@ function Book(props){
                 .then(response => response.json())
                 .then(data => {
                     if(data.errors === undefined){
-                        props.onDelete();
+                        props.onDelete(book);
                     }
                     setReady(false);
                 })

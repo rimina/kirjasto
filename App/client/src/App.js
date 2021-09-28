@@ -28,13 +28,15 @@ function App(){
 
   }, [getBooks]);
 
-  //There has been changes on the booklist so we should fetch the books from the server
-  //This is not the optimal way to do this. For real we should update only the parts needed.
-  //Remove items here locally if something is deleted, append the list with new data added
-  //and do nothing on book update.
-  //Though this is a sure way to keep the state consistent. It's just very inefficient.
+  function deleteBook(b){
+    const index = bookList.indexOf(b);
+    console.log(index);
+    let tmp = bookList;
+    tmp.splice(index, 1);
+    updateCards(tmp);
+    setBookList(tmp);
+  }
   
-
   function updateCards(data){
     let tmp = [];
     console.log("updating cards...");
@@ -42,14 +44,10 @@ function App(){
       const book = data[i];
       tmp.push(<Book
         book = {book}
-        onDelete = {updateBooks}
+        onDelete = {deleteBook}
         key = {book._id}/>);
     }
     setBookCards(tmp);
-  }
-
-  function updateBooks(){
-    setGetBooks(true);
   }
 
   function addBook(b){
@@ -58,7 +56,13 @@ function App(){
     updateCards(tmp);
     setBookList(tmp);
   }
-  
+
+  //If we wanted to update all the books we could use this
+  //Now we fetch the books only when the program starts
+  /*function updateBooks(){
+    setGetBooks(true);
+  }*/
+
   return(
     <div className="App">
       <h1>Books</h1>
