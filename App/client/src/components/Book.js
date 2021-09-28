@@ -37,7 +37,9 @@ function Book(props){
     }
 
     function closeModal(){
-        setModalIsOpen(false);
+        if(!editingIsOpen){
+            setModalIsOpen(false);
+        }
     }
 
     function onEdit(){
@@ -47,7 +49,6 @@ function Book(props){
         setEditingIsOpen(false);
     }
 
-    //we should also save the book info here...
     function saveEdit(newInfo){
         setBook(newInfo);
     }

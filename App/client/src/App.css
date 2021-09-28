@@ -14,7 +14,7 @@ h1, h2 {
 
 .btn {
   font: inherit;
-  padding: 0.5rem 1.5rem;
+  padding: 0.35rem 0.75rem;
   cursor: pointer;
   border-radius: 4px;
   background-color: #800040;
@@ -28,25 +28,13 @@ h1, h2 {
   border-color: #9c1458;
 }
 
-.btn--alt {
-  background-color: transparent;
-  color: #800040;
-}
-
-.btn--alt:hover {
-  background-color: #f8dae9;
-}
-
 .card {
   background-color: white;
   border-radius: 4px;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
   padding: 1rem;
   width: 20rem;
-}
-
-.actions {
-  text-align: right;
+  
 }
 
 .modal {
@@ -76,8 +64,7 @@ h1, h2 {
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
   border-radius: 6px;
   background-color: white;
-  padding: 1rem;
-  text-align: center;
+  padding: 2rem;
   width: 30rem;
   z-index: 10;
   position: fixed;

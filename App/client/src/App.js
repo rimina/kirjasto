@@ -12,6 +12,7 @@ function App(){
 
   const [bookList, setBookList] = useState([]);
   const [getBooks, setGetBooks] = useState(true);
+  const [bookCards, setBookCards] = useState([]);
 
   useEffect(() => {
     if(getBooks){
@@ -19,6 +20,7 @@ function App(){
       .then(response => response.json())
       .then(data => {
         setBookList(data);
+        updateCards(data);
         setGetBooks(false);
       })
       .catch(console.error);
@@ -31,25 +33,38 @@ function App(){
   //Remove items here locally if something is deleted, append the list with new data added
   //and do nothing on book update.
   //Though this is a sure way to keep the state consistent. It's just very inefficient.
+  
+
+  function updateCards(data){
+    let tmp = [];
+    console.log("updating cards...");
+    for(let i = 0; i < data.length; ++i){
+      const book = data[i];
+      tmp.push(<Book
+        book = {book}
+        onDelete = {updateBooks}
+        key = {book._id}/>);
+    }
+    setBookCards(tmp);
+  }
+
   function updateBooks(){
     setGetBooks(true);
   }
 
-  const bookCards = [];
-  for(let i = 0; i < bookList.length; ++i){
-    const book = bookList[i];
-    bookCards.push(<Book
-      book = {book}
-      onDelete = {updateBooks}
-      key = {book._id}/>);
+  function addBook(b){
+    let tmp = bookList;
+    tmp.push(b);
+    updateCards(tmp);
+    setBookList(tmp);
   }
-
+  
   return(
     <div className="App">
-      <p className ="Book-list">Books:</p>
+      <h1>Books</h1>
       <div>{bookCards}</div>
       <br/>
-      <AddNew onSave = {updateBooks}/>
+      <AddNew onSave = {addBook}/>
     </div>
   );
 
