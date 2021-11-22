@@ -2,14 +2,10 @@ import Book from "./Book";
 
 const BooksContainer = (props) => {
   const books = props.items.map((info) => {
-    return (
-      <li key={info._id}>
-        <Book info={info} onClick={props.onSelect} />
-      </li>
-    );
+    return <Book key={info._id} info={info} onClick={props.onSelect} />;
   });
 
-  return <ul>{books}</ul>;
+  return <>{books}</>;
 };
 
 export default BooksContainer;

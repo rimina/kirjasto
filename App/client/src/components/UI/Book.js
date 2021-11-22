@@ -1,5 +1,9 @@
+import { useState } from "react";
+
 const Book = (props) => {
+  const [showDescription, setShowDescription] = useState(false);
   const onBookClick = () => {
+    setShowDescription(!showDescription);
     props.onClick(props.info);
   };
 
@@ -8,8 +12,7 @@ const Book = (props) => {
       Author: {props.info.author}
       <br />
       Title: {props.info.title}
-      <br />
-      Description: {props.info.description}
+      {showDescription && <p>Description: {props.info.description}</p>}
     </div>
   );
 };

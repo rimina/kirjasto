@@ -47,8 +47,6 @@ exports.book_create = function (req, res) {
 exports.book_edit = function (req, res) {
   //getting rid of the id as mongo doesn't let us update the id
   delete req.body._id;
-  console.log("Editing book id: " + req.params.id);
-
   return BookModel.findByIdAndUpdate(
     req.params.id,
     req.body,
@@ -68,7 +66,6 @@ exports.book_edit = function (req, res) {
 
 //Deletes a book
 exports.book_delete = function (req, res) {
-  console.log("Deleting book : " + req.params.id);
   return BookModel.findByIdAndDelete(req.params.id, function (err, book) {
     if (err) {
       console.log(err);
@@ -76,7 +73,7 @@ exports.book_delete = function (req, res) {
     } else if (!book) {
       return res.status(404).send({ message: "not found" });
     } else {
-      return res.status(200).send({ "message: ": "deleted" });
+      return res.status(200).send({ id: book._id, message: "deleted" });
     }
   });
 };

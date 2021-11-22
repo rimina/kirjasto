@@ -180,6 +180,7 @@ const BookList = (props) => {
         saveBookInfo={onSaveHandler}
         onDelete={onBookDeleteHandler}
       ></BookForm>
+      <br />
       <BooksContainer
         items={bookListState.books}
         onSelect={onBookSelectHandler}

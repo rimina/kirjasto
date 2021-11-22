@@ -60,29 +60,31 @@ const BookForm = (props) => {
   };
 
   return (
-    <form onSubmit={onSubmitHandler}>
-      <div>
+    <form onSubmit={onSubmitHandler} className="editInfo">
+      <p>
         <label>Author: </label>
         <input
           type="text"
           value={bookInfo.author}
           onChange={onAuthorChange}
         ></input>
-        <br />
+      </p>
+      <p>
         <label>Title: </label>
         <input
           type="text"
           value={bookInfo.title}
           onChange={onTitleChange}
         ></input>
-        <br />
+      </p>
+      <p>
         <label>Description: </label>
         <textarea
           value={bookInfo.description}
           onChange={onDescriptionChange}
         ></textarea>
-      </div>
-
+      </p>
+      <br />
       <button type="submit" className="btn">
         Save
       </button>
