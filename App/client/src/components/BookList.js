@@ -1,4 +1,6 @@
-import { useReducer } from "react";
+import { useEffect, useReducer } from "react";
+import axios from "axios";
+
 import BookForm from "./BookForm";
 import BooksContainer from "./UI/BooksContainer";
 
@@ -6,33 +8,52 @@ const emptyBook = { title: "", author: "", description: "", _id: null };
 
 const saveBookData = (state, action) => {
   switch (action.type) {
-    case "OnSave": {
-      const edited = state.books.findIndex((book) => {
-        console.log(book._id + " " + action.data._id);
-        return book._id === action.data._id;
-      });
-      if (state.editing && edited >= 0) {
-        state.books[edited] = action.data;
-        return {
-          selectedBook: emptyBook,
-          books: state.books,
-          editing: false,
-        };
-      } else {
-        action.data._id = Math.random();
-        return {
-          selectedBook: emptyBook,
-          books: [...state.books, action.data],
-          editing: false,
-        };
-      }
+    case "onAdd": {
+      return {
+        selectedBook: emptyBook,
+        newBook: emptyBook,
+        editedBook: state.editedBook,
+        books: [...state.books, action.book],
+      };
     }
 
     case "onEdit": {
+      state.books[action.index] = action.book;
       return {
-        selectedBook: action.data,
+        selectedBook: emptyBook,
+        editedBook: action.book,
+        newBook: state.newBook,
         books: state.books,
-        editing: true,
+      };
+    }
+
+    case "onDelete": {
+      const tmp = state.books.filter((book) => {
+        return book._id !== action.book._id;
+      });
+      return {
+        selectedBook: emptyBook,
+        editedBook: state.book,
+        newBook: state.newBook,
+        books: tmp,
+      };
+    }
+
+    case "onInit": {
+      return {
+        selectedBook: state.selectedBook,
+        editedBook: state.editedBook,
+        newBook: state.newBook,
+        books: action.books,
+      };
+    }
+
+    case "onSelect": {
+      return {
+        selectedBook: action.book,
+        editedBook: state.editedBook,
+        newBook: state.newBook,
+        books: state.books,
       };
     }
 
@@ -44,31 +65,112 @@ const saveBookData = (state, action) => {
 
 const BookList = (props) => {
   const [bookListState, dispatchBookListState] = useReducer(saveBookData, {
-    books: [
-      {
-        title: "Hobitti",
-        author: "J.R.R. Tolkien",
-        description: "moi",
-        _id: 10,
-      },
-    ],
+    books: [],
     selectedBook: emptyBook,
-    editing: false,
+    editedBook: emptyBook,
+    newBook: emptyBook,
   });
 
-  const onSaveHandler = (data) => {
-    dispatchBookListState({
-      type: "OnSave",
-      data: data,
+  useEffect(() => {
+    async function getBooks() {
+      const res = await axios.get(props.url).catch((err) => {
+        console.error(err);
+        return err;
+      });
+
+      if (res.status === 200) {
+        dispatchBookListState({
+          type: "onInit",
+          books: res.data,
+        });
+      }
+    }
+    getBooks();
+  }, [props.url]);
+
+  async function saveNew(data) {
+    const book = {
+      author: data.author,
+      title: data.title,
+      description: data.description,
+    };
+    const res = await axios.post(props.url, book).catch((err) => {
+      console.error(err);
+      return err;
     });
+
+    if (res.status === 201) {
+      dispatchBookListState({
+        type: "onAdd",
+        book: res.data,
+      });
+    }
+  }
+
+  async function editOld(data, index) {
+    const book = {
+      author: data.author,
+      title: data.title,
+      description: data.description,
+    };
+
+    const res = await axios
+      .put(props.url + "/" + data._id, book)
+      .catch((err) => {
+        console.error(err);
+        return err;
+      });
+
+    if (res.status === 200) {
+      dispatchBookListState({
+        type: "onEdit",
+        index: index,
+        book: data,
+      });
+    }
+  }
+
+  async function deleteBook(data) {
+    const res = await axios.delete(props.url + "/" + data._id).catch((err) => {
+      console.error(err);
+      return err;
+    });
+
+    if (res.status === 200) {
+      dispatchBookListState({
+        type: "onDelete",
+        book: data,
+      });
+    }
+  }
+
+  const onSaveHandler = (data) => {
+    const edited = bookListState.books.findIndex((book) => {
+      return book._id === data._id;
+    });
+
+    if (edited >= 0) {
+      editOld(data, edited);
+    } else {
+      saveNew(data);
+    }
   };
 
   const onBookSelectHandler = (book) => {
-    console.log(book);
     dispatchBookListState({
-      type: "onEdit",
-      data: book,
+      type: "onSelect",
+      book: book,
     });
+  };
+
+  const onBookDeleteHandler = (data) => {
+    const toDelete = bookListState.books.findIndex((book) => {
+      return book._id === data._id;
+    });
+
+    if (toDelete >= 0) {
+      deleteBook(data);
+    }
   };
 
   return (
@@ -76,6 +178,7 @@ const BookList = (props) => {
       <BookForm
         book={bookListState.selectedBook}
         saveBookInfo={onSaveHandler}
+        onDelete={onBookDeleteHandler}
       ></BookForm>
       <BooksContainer
         items={bookListState.books}

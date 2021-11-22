@@ -4,7 +4,7 @@ const Book = (props) => {
   };
 
   return (
-    <div onClick={onBookClick}>
+    <div onClick={onBookClick} className="card">
       Author: {props.info.author}
       <br />
       Title: {props.info.title}

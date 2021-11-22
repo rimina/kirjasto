@@ -50,34 +50,48 @@ const BookForm = (props) => {
     });
   };
 
+  const onDeleteHandler = () => {
+    props.onDelete(bookInfo);
+    setBookInfo(emptyInfo);
+  };
+
   const onCancelHandler = () => {
     setBookInfo(emptyInfo);
   };
 
   return (
     <form onSubmit={onSubmitHandler}>
-      <label>Author:</label>
-      <input
-        type="text"
-        value={bookInfo.author}
-        onChange={onAuthorChange}
-      ></input>
+      <div>
+        <label>Author: </label>
+        <input
+          type="text"
+          value={bookInfo.author}
+          onChange={onAuthorChange}
+        ></input>
+        <br />
+        <label>Title: </label>
+        <input
+          type="text"
+          value={bookInfo.title}
+          onChange={onTitleChange}
+        ></input>
+        <br />
+        <label>Description: </label>
+        <textarea
+          value={bookInfo.description}
+          onChange={onDescriptionChange}
+        ></textarea>
+      </div>
 
-      <label>Title:</label>
-      <input
-        type="text"
-        value={bookInfo.title}
-        onChange={onTitleChange}
-      ></input>
-
-      <label>Description</label>
-      <textarea
-        value={bookInfo.description}
-        onChange={onDescriptionChange}
-      ></textarea>
-
-      <button type="submit">Save</button>
-      <button type="button" onClick = {onCancelHandler}>Cancel</button>
+      <button type="submit" className="btn">
+        Save
+      </button>
+      <button type="button" className="btn" onClick={onDeleteHandler}>
+        Delete
+      </button>
+      <button type="button" className="btn" onClick={onCancelHandler}>
+        Cancel
+      </button>
     </form>
   );
 };
