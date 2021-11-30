@@ -8,9 +8,6 @@ const bookController = require("../controllers/bookController");
 const router = express.Router();
 //Enabling preflight
 router.options("/", cors());
-router.use(function timeLog(req, res, next) {
-  next();
-});
 
 //POST for creating a book
 router.post("/", bookController.book_create);

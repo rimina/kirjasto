@@ -2,7 +2,7 @@
 import "./App.css";
 import BookList from "./components/BookList";
 
-const url = "http://localhost:5000/api";
+const url = "http://localhost:5000/api/books";
 
 function App() {
   return (

@@ -14,6 +14,7 @@ const saveBookData = (state, action) => {
         newBook: emptyBook,
         editedBook: state.editedBook,
         books: [...state.books, action.book],
+        selectionActive: state.selectionActive,
       };
     }
 
@@ -24,6 +25,7 @@ const saveBookData = (state, action) => {
         editedBook: action.book,
         newBook: state.newBook,
         books: state.books,
+        selectionActive: state.selectionActive,
       };
     }
 
@@ -36,6 +38,7 @@ const saveBookData = (state, action) => {
         editedBook: state.book,
         newBook: state.newBook,
         books: tmp,
+        selectionActive: state.selectionActive,
       };
     }
 
@@ -45,16 +48,28 @@ const saveBookData = (state, action) => {
         editedBook: state.editedBook,
         newBook: state.newBook,
         books: action.books,
+        selectionActive: state.selectionActive,
       };
     }
 
     case "onSelect": {
-      return {
-        selectedBook: action.book,
-        editedBook: state.editedBook,
-        newBook: state.newBook,
-        books: state.books,
-      };
+      if (state.selectionActive) {
+        return {
+          selectedBook: emptyBook,
+          editedBook: state.editedBook,
+          newBook: state.newBook,
+          books: state.books,
+          selectionActive: false,
+        };
+      } else {
+        return {
+          selectedBook: action.book,
+          editedBook: state.editedBook,
+          newBook: state.newBook,
+          books: state.books,
+          selectionActive: true,
+        };
+      }
     }
 
     default: {
@@ -69,6 +84,7 @@ const BookList = (props) => {
     selectedBook: emptyBook,
     editedBook: emptyBook,
     newBook: emptyBook,
+    selectionActive: false,
   });
 
   useEffect(() => {
