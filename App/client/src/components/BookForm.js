@@ -15,7 +15,6 @@ const BookForm = (props) => {
     _id: props.book._id,
   });
 
-  //USE EFFECT!!!!
   useEffect(() => {
     setBookInfo({
       title: props.book.title,
