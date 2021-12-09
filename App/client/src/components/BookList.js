@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 
 import BookForm from "./BookForm";
@@ -6,86 +6,14 @@ import BooksContainer from "./UI/BooksContainer";
 
 const emptyBook = { title: "", author: "", description: "", _id: null };
 
-const saveBookData = (state, action) => {
-  switch (action.type) {
-    case "onAdd": {
-      return {
-        selectedBook: emptyBook,
-        newBook: emptyBook,
-        editedBook: state.editedBook,
-        books: [...state.books, action.book],
-        selectionActive: state.selectionActive,
-      };
-    }
-
-    case "onEdit": {
-      state.books[action.index] = action.book;
-      return {
-        selectedBook: emptyBook,
-        editedBook: action.book,
-        newBook: state.newBook,
-        books: state.books,
-        selectionActive: state.selectionActive,
-      };
-    }
-
-    case "onDelete": {
-      const tmp = state.books.filter((book) => {
-        return book._id !== action.book._id;
-      });
-      return {
-        selectedBook: emptyBook,
-        editedBook: state.book,
-        newBook: state.newBook,
-        books: tmp,
-        selectionActive: state.selectionActive,
-      };
-    }
-
-    case "onInit": {
-      return {
-        selectedBook: state.selectedBook,
-        editedBook: state.editedBook,
-        newBook: state.newBook,
-        books: action.books,
-        selectionActive: state.selectionActive,
-      };
-    }
-
-    case "onSelect": {
-      if (state.selectionActive) {
-        return {
-          selectedBook: emptyBook,
-          editedBook: state.editedBook,
-          newBook: state.newBook,
-          books: state.books,
-          selectionActive: false,
-        };
-      } else {
-        return {
-          selectedBook: action.book,
-          editedBook: state.editedBook,
-          newBook: state.newBook,
-          books: state.books,
-          selectionActive: true,
-        };
-      }
-    }
-
-    default: {
-      console.log(state);
-    }
-  }
-};
-
 const BookList = (props) => {
-  const [bookListState, dispatchBookListState] = useReducer(saveBookData, {
-    books: [],
-    selectedBook: emptyBook,
-    editedBook: emptyBook,
-    newBook: emptyBook,
-    selectionActive: false,
-  });
+  const [books, setBooks] = useState([]);
+  const [selected, setSelected] = useState(emptyBook);
+  const [isActive, setActive] = useState(false);
+
+  const initBooks = (data) => {
+    setBooks(data);
+  };
 
   useEffect(() => {
     async function getBooks() {
@@ -95,10 +23,7 @@ const BookList = (props) => {
       });
 
       if (res.status === 200) {
-        dispatchBookListState({
-          type: "onInit",
-          books: res.data,
-        });
+        initBooks(res.data);
       }
     }
     getBooks();
@@ -116,10 +41,11 @@ const BookList = (props) => {
     });
 
     if (res.status === 201) {
-      dispatchBookListState({
-        type: "onAdd",
-        book: res.data,
+      setBooks((prev) => {
+        return [...prev, res.data];
       });
+      setSelected(emptyBook);
+      setActive(false);
     }
   }
 
@@ -138,11 +64,9 @@ const BookList = (props) => {
       });
 
     if (res.status === 200) {
-      dispatchBookListState({
-        type: "onEdit",
-        index: index,
-        book: data,
-      });
+      books[index] = data;
+      setSelected(emptyBook);
+      setActive(false);
     }
   }
 
@@ -153,15 +77,17 @@ const BookList = (props) => {
     });
 
     if (res.status === 200) {
-      dispatchBookListState({
-        type: "onDelete",
-        book: data,
+      const tmp = books.filter((book) => {
+        return book._id !== data._id;
       });
+      setBooks(tmp);
+      setSelected(emptyBook);
+      setActive(false);
     }
   }
 
   const onSaveHandler = (data) => {
-    const edited = bookListState.books.findIndex((book) => {
+    const edited = books.findIndex((book) => {
       return book._id === data._id;
     });
 
@@ -173,14 +99,17 @@ const BookList = (props) => {
   };
 
   const onBookSelectHandler = (book) => {
-    dispatchBookListState({
-      type: "onSelect",
-      book: book,
-    });
+    if (isActive) {
+      setSelected(emptyBook);
+      setActive(false);
+    } else {
+      setSelected(book);
+      setActive(true);
+    }
   };
 
   const onBookDeleteHandler = (data) => {
-    const toDelete = bookListState.books.findIndex((book) => {
+    const toDelete = books.findIndex((book) => {
       return book._id === data._id;
     });
 
@@ -192,13 +121,13 @@ const BookList = (props) => {
   return (
     <>
       <BookForm
-        book={bookListState.selectedBook}
+        book={selected}
         saveBookInfo={onSaveHandler}
         onDelete={onBookDeleteHandler}
       ></BookForm>
       <br />
       <BooksContainer
-        items={bookListState.books}
+        items={books}
         onSelect={onBookSelectHandler}
       ></BooksContainer>
     </>
