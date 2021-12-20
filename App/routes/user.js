@@ -14,9 +14,9 @@ router.options("/login", cors());
 
 //POST for creating a book
 router.post(
-  "/",
-  passport.authenticate("signup", { session: false }),
-  userController.user_signup
+    "/",
+    passport.authenticate("signup", { session: false }),
+    userController.user_signup
 );
 
 router.post("/login", userController.user_login);
