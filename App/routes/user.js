@@ -12,7 +12,7 @@ const router = express.Router();
 router.options("/", cors());
 router.options("/login", cors());
 
-//POST for creating a book
+//POST for creating a user
 router.post(
     "/",
     passport.authenticate("signup", { session: false }),

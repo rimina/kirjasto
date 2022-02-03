@@ -7,7 +7,7 @@ const passport = require("passport");
 require("./auth/auth");
 
 const indexRouter = require("./routes/index");
-const apiRouter = require("./routes/api");
+const bookRouter = require("./routes/book");
 const userRouter = require("./routes/user");
 const secureRoute = require("./routes/secure");
 
@@ -35,14 +35,19 @@ app.use(passport.initialize());
 
 app.use(cors());
 app.use("/", indexRouter);
-app.use("/api/books", apiRouter);
+app.use("/api/books", bookRouter);
 app.use("/users", userRouter);
 app.use("/user", passport.authenticate("jwt", { session: false }), secureRoute);
 
-app.use(function (err, req, res, next) {
+app.use(function(_req, res){
+    res.status(404).send({error: "No one here"});
+});
+
+app.use(function (err, _req, res, next) {
     console.log("general error handling");
     res.status(err.status || 500);
     res.json({ error: err });
+    next(err);
 });
 
 app.listen(port, () => {

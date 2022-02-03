@@ -2,7 +2,7 @@
 const express = require("express");
 const router = express.Router();
 
-router.use(function timeLog(req, res, next) {
+router.use(function timeLog(_req, _res, next) {
   next();
 });
 

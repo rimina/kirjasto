@@ -3,7 +3,7 @@ const passport = require("passport");
 const jwt = require("jsonwebtoken");
 const UserModel = require("../models/userModel");
 
-exports.user_list = function (req, res) {
+exports.user_list = function (_req, res) {
     return UserModel.find({}, function (err, users) {
         if (!err) {
             return res.status(200).send(users);
@@ -28,7 +28,7 @@ exports.user_info = function (req, res) {
 };
 
 //Creates a new user
-exports.user_signup = async (req, res, next) => {
+exports.user_signup = async (req, res, _next) => {
     res.status(201).json({
         message: "Signup successful",
         user: req.user,
@@ -56,38 +56,3 @@ exports.user_login = async (req, res, next) => {
         }
     })(req, res, next);
 };
-
-//Edits an existing user
-/*exports.user_edit = function (req, res) {
-  //getting rid of the id as mongo doesn't let us update the id
-  delete req.body._id;
-  return UserModel.findByIdAndUpdate(
-    req.params.id,
-    req.body,
-    { runValidators: true },
-    function (err, user) {
-      if (err) {
-        console.log(err);
-        return res.status(500).send(err);
-      } else if (!user) {
-        return res.status(404).send({ message: "not found" });
-      } else {
-        return res.status(200).send({ id: user._id, message: "edited" });
-      }
-    }
-  );
-};
-
-//Deletes a user
-exports.user_delete = function (req, res) {
-  return UserModel.findByIdAndDelete(req.params.id, function (err, user) {
-    if (err) {
-      console.log(err);
-      return res.status(500).send(err);
-    } else if (!user) {
-      return res.status(404).send({ message: "not found" });
-    } else {
-      return res.status(200).send({ id: user._id, message: "deleted" });
-    }
-  });
-};*/

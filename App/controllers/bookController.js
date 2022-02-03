@@ -1,10 +1,8 @@
 //controller for the REST API
-//const mongoose = require('mongoose');
-//const Book = mongoose.model('Book');
 const BookModel = require("../models/bookModel");
 
 //Return all books
-exports.book_list = function (req, res) {
+exports.book_list = function (_req, res) {
   return BookModel.find({}, function (err, books) {
     if (!err) {
       return res.status(200).send(books);
